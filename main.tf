@@ -43,7 +43,7 @@ resource "aws_security_group_rule" "blog_80_in" {
   protocol    = "tcp"
   cidr_blocks = ["0.0.0.0/0"]
 
-  aws_security_group_id = aws_security_group.blog.id
+  security_group_id = aws_security_group.blog.id
 }
 
 resource "aws_security_group_rule" "blog_443_in" {
@@ -53,7 +53,7 @@ resource "aws_security_group_rule" "blog_443_in" {
   protocol    = "tcp"
   cidr_blocks = ["0.0.0.0/0"]
 
-  aws_security_group_id = aws_security_group.blog.id
+  security_group_id = aws_security_group.blog.id
 }
 
 resource "aws_security_group_rule" "blog_out" {
@@ -63,5 +63,5 @@ resource "aws_security_group_rule" "blog_out" {
   protocol    = "-1"
   cidr_blocks = ["0.0.0.0/0"]
 
-  aws_security_group_id = aws_security_group.blog.id
+  security_group_id = aws_security_group.blog.id
 }
