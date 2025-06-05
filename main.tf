@@ -76,14 +76,19 @@ module "alb" {
 
   listeners = {
     http = {
-      port               = 80
-      protocol           = "HTTP"
-      target_group_index = 0
+      port     = 80
+      protocol = "HTTP"
+      default_action = {
+        type         = "forward"
+        target_group = {
+          key = "blog"
+        }
+      }
     }
   }
 
-  target_groups = [
-    {
+  target_groups = {
+    blog = {
       name_prefix          = "blog-"
       backend_protocol     = "HTTP"
       backend_port         = 80
@@ -100,14 +105,14 @@ module "alb" {
         protocol            = "HTTP"
         matcher             = "200-399"
       }
-      targets = [
-        {
+      targets = {
+        blog = {
           target_id = aws_instance.blog.id
           port      = 80
         }
-      ]
+      }
     }
-  ]
+  }
 
   tags = {
     Environment = "dev"
