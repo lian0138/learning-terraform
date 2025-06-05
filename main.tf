@@ -100,12 +100,12 @@ module "alb" {
         protocol            = "HTTP"
         matcher             = "200-399"
       }
-      targets = {
-        blog = {
+      targets = [
+        {
           target_id = aws_instance.blog.id
           port      = 80
         }
-      }
+      ]
     }
   ]
 
