@@ -75,29 +75,39 @@ module "alb" {
   }
 
   listeners = {
-    ex-http-https-redirect = {
-      port     = 80
-      protocol = "HTTP"
-      default_action = {
-        type = "forward"
-        forward = {
-          target_group = {
-            key = "ex-instance"
-          }
-        }
-      }
+    http = {
+      port               = 80
+      protocol           = "HTTP"
+      target_group_index = 0
     }
   }
 
-  target_groups = {
-    ex-instance = {
-      name_prefix      = "blog-"
-      protocol         = "HTTP"
-      port             = 80
-      target_type      = "instance"
-      target_id        = aws_instance.blog.id
+  target_groups = [
+    {
+      name_prefix          = "blog-"
+      backend_protocol     = "HTTP"
+      backend_port         = 80
+      target_type          = "instance"
+      deregistration_delay = 10
+      health_check = {
+        enabled             = true
+        interval            = 30
+        path                = "/"
+        port                = "traffic-port"
+        healthy_threshold   = 3
+        unhealthy_threshold = 3
+        timeout             = 6
+        protocol            = "HTTP"
+        matcher             = "200-399"
+      }
+      targets = {
+        blog = {
+          target_id = aws_instance.blog.id
+          port      = 80
+        }
+      }
     }
-  }
+  ]
 
   tags = {
     Environment = "dev"
